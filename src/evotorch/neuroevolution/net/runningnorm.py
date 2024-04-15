@@ -19,7 +19,7 @@ from typing import Iterable, Optional, Union
 import torch
 from torch import nn
 
-from evotorch_grad_params.tools import Device, DType, to_torch_dtype
+from evotorch.tools import Device, DType, to_torch_dtype
 
 CollectedStats = namedtuple("CollectedStats", ["mean", "stdev"])
 

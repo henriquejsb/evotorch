@@ -134,6 +134,8 @@ class CMAES(SearchAlgorithm, SinglePopulationAlgorithmMixin):
         separable: bool = False,
         limit_C_decomposition: bool = True,
         obj_index: Optional[int] = None,
+
+        elitism = False,
     ):
         """
         `__init__(...)`: Initialize the CMAES solver.
@@ -231,7 +233,11 @@ class CMAES(SearchAlgorithm, SinglePopulationAlgorithmMixin):
         # Half popsize, referred to as mu in CMA-ES literature
         self.mu = int(np.floor(popsize / 2))
         self._population = problem.generate_batch(popsize=popsize)
-
+        
+        
+        self.best = None
+        self.best_eval = None
+        self.elitist = elitism
         # === Initialize search distribution ===
 
         self.separable = separable
@@ -244,9 +250,11 @@ class CMAES(SearchAlgorithm, SinglePopulationAlgorithmMixin):
         # point in the search space.
         if center_init is None:
             center_init = self._problem.generate_values(1)
+
         elif isinstance(center_init, Solution):
             center_init = center_init.values.clone()
 
+       
         # Store the center
         self.m = self._problem.make_tensor(center_init)
 

@@ -143,7 +143,7 @@ class PyCMAES(SearchAlgorithm, SinglePopulationAlgorithmMixin):
             raise ImportError(f"The class {type(self).__name__} is only available if the package `cma` is installed.")
 
         # Initialize the base class
-        SearchAlgorithm.__init__(self, problem, center=self._get_center)
+        SearchAlgorithm.__init__(self, problem, center=self._get_center, best=self._get_best,best_eval=self._get_best_eval)
 
         # Ensure that the problem is numeric
         problem.ensure_numeric()
@@ -279,6 +279,12 @@ class PyCMAES(SearchAlgorithm, SinglePopulationAlgorithmMixin):
 
     def _get_center(self) -> torch.Tensor:
         return torch.as_tensor(self._es.result[5], dtype=self._population.dtype, device=self._population.device)
+
+    def _get_best(self) -> torch.Tensor:
+        return torch.as_tensor(self._es.result[0], dtype=self._population.dtype, device=self._population.device)
+
+    def _get_best_eval(self) -> float:
+        return float(self._es.result[1])
 
     @property
     def obj_index(self) -> int:

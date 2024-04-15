@@ -525,6 +525,10 @@ class SinglePopulationAlgorithmMixin:
         def _get_pop_best(self):
             i = self.population.argbest(self.obj_index)
             return clone(self.population[i])
+        
+
+
+
 
         def _get_pop_best_eval(self):
             pop_best = None

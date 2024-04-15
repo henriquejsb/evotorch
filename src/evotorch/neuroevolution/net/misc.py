@@ -37,6 +37,7 @@ def fill_parameters(net: nn.Module, vector: torch.Tensor):
     """
     address = 0
     for p in net.parameters():
+        if not p.requires_grad:continue
         d = p.data.view(-1)
         n = len(d)
         d[:] = torch.as_tensor(vector[address : address + n], device=d.device)
@@ -65,6 +66,7 @@ def parameter_vector(net: nn.Module, *, device: Optional[Device] = None) -> torc
 
     all_vectors = []
     for p in net.parameters():
+        if not p.requires_grad:continue
         all_vectors.append(torch.as_tensor(p.data.view(-1), **dev_kwarg))
 
     return torch.cat(all_vectors)
@@ -83,6 +85,8 @@ def count_parameters(net: nn.Module) -> int:
     count = 0
 
     for p in net.parameters():
+        if not p.requires_grad:
+            continue
         count += p.numel()
 
     return count
@@ -110,6 +114,7 @@ def device_of_module(m: nn.Module, default: Optional[Union[str, torch.device]] =
     device = default
 
     for p in m.parameters():
+        if not p.requires_grad:continue
         device = p.device
         break
 
